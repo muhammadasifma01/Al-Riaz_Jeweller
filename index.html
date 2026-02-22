@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AL-RIAZ Gems & Jewellers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #090a05;
+    --deep-black: #050403;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5e199;
+    --gold-dark: #8a6e2e;
+    --white: #f5f0e8;
+    --cream: #e8dfc8;
+    --gem-red: #d4364a;
+    --gem-blue: #2e6fcc;
+    --gem-green: #2ecc7a;
+    --gem-purple: #9b52cc;
+    --gem-orange: #e8821a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--black);
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.6;
+  }
+
+  /* Gold Grain Overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* ===== RATES TICKER BAR ===== */
+  .rates-ticker-bar {
+    position: fixed;
+    top: 80px;
+    left: 0; right: 0;
+    z-index: 850;
+    background: linear-gradient(90deg, rgba(5,4,3,0.98), rgba(12,9,4,0.98));
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    height: 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dark);
+    padding: 0 16px;
+    white-space: nowrap;
+    border-right: 1px solid rgba(201,168,76,0.2);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    background: rgba(201,168,76,0.06);
+  }
+  .ticker-track {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-track::before,
+  .ticker-track::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 40px;
+    z-index: 2;
+  }
+  .ticker-track::before { left: 0; background: linear-gradient(90deg, rgba(5,4,3,0.98), transparent); }
+  .ticker-track::after  { right: 0; background: linear-gradient(90deg, transparent, rgba(5,4,3,0.98)); }
+  .ticker-scroll {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: tickerMove 40s linear infinite;
+  }
+  .ticker-scroll:hover { animation-play-state: paused; }
+  @keyframes tickerMove {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 28px;
+    border-right: 1px solid rgba(201,168,76,0.1);
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+  .ticker-name { color: var(--cream); opacity: 0.6; }
+  .ticker-price { color: var(--gold-light); font-weight: 600; }
+  .ticker-change-up   { color: #4CAF50; font-size: 0.55rem; }
+  .ticker-change-down { color: #e06060; font-size: 0.55rem; }
+  .ticker-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ===== NAVIGATION ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    background: linear-gradient(180deg, rgba(5,4,3,0.98) 0%, rgba(5,4,3,0.0) 100%);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(5,4,3,0.97);
+    border-bottom-color: rgba(201,168,76,0.3);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.7);
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-gem { width: 36px; height: 36px; position: relative; }
+  .nav-logo-gem svg { width: 100%; height: 100%; }
+  .nav-logo-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+  .nav-logo-text span {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    opacity: 0.7;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.75;
+    transition: all 0.3s;
+    position: relative;
+    padding-bottom: 4px;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 100%;
+    height: 1px;
+    background: var(--gold);
+    transition: right 0.3s ease;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-links a:hover::after { right: 0; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--black) !important;
+    padding: 8px 22px !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    border-radius: 1px;
+    letter-spacing: 0.15em !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,168,76,0.4); }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px; height: 2px;
+    background: var(--gold);
+    transition: all 0.3s;
+  }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--deep-black);
+    padding-top: 116px; /* nav + ticker */
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(46,111,204,0.04) 0%, transparent 40%);
+  }
+  .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 5%;
+    animation: heroReveal 1.2s ease forwards;
+  }
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-crown {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: crownFloat 3s ease-in-out infinite;
+    display: block;
+  }
+  @keyframes crownFloat {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  .hero-gem-icon {
+    width: 100px; height: 100px;
+    margin: 0 auto 1.5rem;
+    animation: gemSpin 8s linear infinite;
+  }
+  @keyframes gemSpin {
+    0%   { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+  .hero-tagline {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 0.4s forwards;
+  }
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: fadeIn 1s 0.6s forwards;
+  }
+  .hero-title .al { color: var(--white); }
+  .hero-title .riaz {
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: goldShimmer 3s ease infinite, fadeIn 1s 0.6s forwards;
+  }
+  @keyframes goldShimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .hero-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeIn 1s 0.8s forwards;
+    margin-bottom: 0.8rem;
+  }
+  .hero-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    color: var(--cream);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeIn 1s 1s forwards;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeIn 1s 1.2s forwards;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+    color: var(--black);
+    padding: 16px 40px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.5); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold);
+    padding: 15px 40px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    border: 1px solid var(--gold-dark);
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-secondary:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(201,168,76,0.2);
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dark);
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.3; transform: scaleY(0.8); }
+    50%      { opacity: 1; transform: scaleY(1); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== DIVIDERS ===== */
+  .gold-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin: 3rem 0;
+  }
+  .gold-divider::before, .gold-divider::after {
+    content: '';
+    flex: 1;
+    max-width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark));
+  }
+  .gold-divider::after { background: linear-gradient(90deg, var(--gold-dark), transparent); }
+  .gold-divider-icon { color: var(--gold); font-size: 1.2rem; }
+
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 6rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-title .gold-text {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.6;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 4rem;
+  }
+
+  /* ===== LIVE RATES SECTION ===== */
+  #live-rates {
+    background: var(--deep-black);
+    max-width: 100%;
+    padding: 5rem 5%;
+    position: relative;
+    overflow: hidden;
+  }
+  #live-rates::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 50%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .live-rates-inner { max-width: 1400px; margin: 0 auto; }
+
+  .rates-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .rates-header-left .section-title,
+  .rates-header-left .section-label { text-align: left; }
+
+  .rates-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .rates-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    background: rgba(76,175,80,0.1);
+    border: 1px solid rgba(76,175,80,0.3);
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: #4CAF50;
+    text-transform: uppercase;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4CAF50;
+    box-shadow: 0 0 8px #4CAF50;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .rates-timestamp {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    opacity: 0.35;
+  }
+  .rates-currency-toggle {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .currency-btn {
+    padding: 5px 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    border: 1px solid rgba(201,168,76,0.25);
+    background: transparent;
+    color: var(--cream);
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.5;
+  }
+  .currency-btn.active {
+    background: rgba(201,168,76,0.12);
+    border-color: rgba(201,168,76,0.5);
+    color: var(--gold);
+    opacity: 1;
+  }
+  .currency-btn:hover { opacity: 0.8; }
+
+  /* Rates Grid */
+  .rates-main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5px;
+    margin-bottom: 1.5px;
+  }
+  .rate-card {
+    background: rgba(10,8,4,0.8);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: default;
+  }
+  .rate-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--gold));
+    opacity: 0.6;
+  }
+  .rate-card:hover {
+    border-color: rgba(201,168,76,0.35);
+    background: rgba(201,168,76,0.03);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+  }
+  .rate-card-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .rate-card:hover .rate-card-shimmer { transform: translateX(100%); }
+
+  .rate-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .rate-card-icon {
+    width: 52px; height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.6rem;
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.15);
+    flex-shrink: 0;
+  }
+  .rate-card-change {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+  .rate-change-up   { color: #4CAF50; background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.25); }
+  .rate-change-down { color: #e06060; background: rgba(224,96,96,0.1); border: 1px solid rgba(224,96,96,0.25); }
+  .rate-change-flat { color: var(--gold-dark); background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); }
+
+  .rate-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .rate-card-symbol {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cream);
+    opacity: 0.4;
+    margin-bottom: 1rem;
+  }
+  .rate-primary {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .rate-primary .rate-unit {
+    font-size: 0.55em;
+    color: var(--gold-dark);
+    letter-spacing: 0.1em;
+    vertical-align: super;
+    margin-right: 4px;
+  }
+  .rate-per-unit {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    opacity: 0.35;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+  }
+  .rate-breakdowns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .rate-breakdown-item { }
+  .rate-breakdown-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .rate-breakdown-value {
+    font-family: 'Cinzel', serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--cream);
+  }
+  .rate-breakdown-value.highlighted { color: var(--gold-light); }
+
+  /* Small rates row */
+  .rates-secondary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5px;
+  }
+  .rate-card-small {
+    background: rgba(10,8,4,0.8);
+    border: 1px solid rgba(201,168,76,0.08);
+    padding: 1.5rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .rate-card-small::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--gold));
+    opacity: 0.5;
+  }
+  .rate-card-small:hover {
+    border-color: rgba(201,168,76,0.3);
+    background: rgba(201,168,76,0.03);
+  }
+  .rate-card-small-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .rate-card-small-body { flex: 1; }
+  .rate-card-small-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .rate-card-small-price {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .rate-card-small-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    opacity: 0.4;
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .rate-card-small-change {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    text-align: right;
+  }
+
+  /* Disclaimer */
+  .rates-disclaimer {
+    text-align: center;
+    margin-top: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--cream);
+    opacity: 0.3;
+  }
+
+  /* Loading skeleton */
+  .rate-loading {
+    display: inline-block;
+    width: 100px;
+    height: 1.2em;
+    background: linear-gradient(90deg, rgba(201,168,76,0.06) 25%, rgba(201,168,76,0.14) 50%, rgba(201,168,76,0.06) 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease infinite;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+  @keyframes skeleton {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Error state */
+  .rates-error {
+    text-align: center;
+    padding: 3rem;
+    color: var(--cream);
+    opacity: 0.4;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* ===== ABOUT ===== */
+  #about {
+    background: linear-gradient(135deg, rgba(10,8,5,1) 0%, rgba(20,15,8,1) 100%);
+    max-width: 100%;
+    padding: 6rem 5%;
+  }
+  .about-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .about-text .section-title, .about-text .section-label { text-align: left; }
+  .about-text .section-desc { text-align: left; margin: 0 0 2rem; }
+  .about-text p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--cream);
+    opacity: 0.75;
+    margin-bottom: 1.5rem;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .stat-card {
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(201,168,76,0.03);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-3px); }
+  .stat-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    opacity: 0.6;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+  }
+  .about-visual { position: relative; }
+  .about-gem-display {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    aspect-ratio: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .about-gem-display .center-gem {
+    width: 200px; height: 200px;
+    animation: gemPulse 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(201,168,76,0.4));
+  }
+  @keyframes gemPulse {
+    0%,100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 30px rgba(201,168,76,0.4)); }
+    50%      { transform: scale(1.05) rotate(5deg); filter: drop-shadow(0 0 50px rgba(201,168,76,0.7)); }
+  }
+  .orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  .orbit-1 { width: 280px; height: 280px; animation: orbitSpin 15s linear infinite; }
+  .orbit-2 { width: 380px; height: 380px; animation: orbitSpin 25s linear infinite reverse; }
+  .orbit-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    top: -4px; left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px var(--gold);
+  }
+  @keyframes orbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ===== PRODUCTS ===== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 4rem;
+  }
+  .product-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(15,12,8,0.8);
+    border: 1px solid rgba(201,168,76,0.1);
+    transition: all 0.4s ease;
+    cursor: pointer;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.05), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 1;
+  }
+  .product-card:hover::before { opacity: 1; }
+  .product-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.2);
+    z-index: 2;
+  }
+  .product-icon-wrap {
+    padding: 3rem 2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-icon {
+    width: 100px; height: 100px;
+    transition: transform 0.4s ease;
+    filter: drop-shadow(0 4px 20px rgba(201,168,76,0.2));
+  }
+  .product-card:hover .product-icon {
+    transform: scale(1.1) translateY(-5px) rotate(5deg);
+    filter: drop-shadow(0 8px 30px rgba(201,168,76,0.5));
+  }
+  .product-body {
+    padding: 1.5rem 2rem 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .product-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    margin-bottom: 0.8rem;
+  }
+  .product-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--cream);
+    opacity: 0.55;
+  }
+  .product-card-gold { border-top: 2px solid var(--gold-dark); }
+
+  /* ===== GEMS SHOWCASE ===== */
+  #gems-showcase {
+    background: var(--deep-black);
+    max-width: 100%;
+    padding: 6rem 5%;
+    overflow: hidden;
+  }
+  .gems-inner { max-width: 1400px; margin: 0 auto; }
+  .gems-marquee-wrap {
+    overflow: hidden;
+    margin-top: 4rem;
+    position: relative;
+  }
+  .gems-marquee-wrap::before, .gems-marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 100px;
+    z-index: 2;
+  }
+  .gems-marquee-wrap::before { left: 0; background: linear-gradient(90deg, var(--deep-black), transparent); }
+  .gems-marquee-wrap::after  { right: 0; background: linear-gradient(90deg, transparent, var(--deep-black)); }
+  .gems-marquee {
+    display: flex;
+    gap: 2rem;
+    animation: marqueeScroll 25s linear infinite;
+    width: max-content;
+  }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .gems-marquee:hover { animation-play-state: paused; }
+  .gem-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 140px;
+    padding: 1.5rem 1rem;
+    border: 1px solid rgba(201,168,76,0.12);
+    background: rgba(10,8,5,0.6);
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .gem-item:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.05);
+    transform: translateY(-4px);
+  }
+  .gem-item svg { width: 60px; height: 60px; }
+  .gem-item-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ===== WHY CHOOSE US ===== */
+  #why-us {
+    background: linear-gradient(180deg, rgba(10,8,5,1), rgba(18,14,8,1));
+    max-width: 100%;
+    padding: 6rem 5%;
+  }
+  .why-inner { max-width: 1400px; margin: 0 auto; }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .feature-card {
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(201,168,76,0.1);
+    background: rgba(10,8,5,0.5);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    background: rgba(201,168,76,0.04);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  .feature-icon { font-size: 2.5rem; margin-bottom: 1.5rem; display: block; }
+  .feature-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    margin-bottom: 0.8rem;
+  }
+  .feature-desc { font-size: 0.95rem; line-height: 1.7; color: var(--cream); opacity: 0.55; }
+
+  /* ===== OWNER ===== */
+  #owner {
+    background: linear-gradient(135deg, rgba(18,13,6,1) 0%, rgba(8,6,3,1) 100%);
+    max-width: 100%;
+    padding: 6rem 5%;
+    position: relative;
+    overflow: hidden;
+  }
+  #owner::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -20%;
+    width: 60%; height: 200%;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .owner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .owner-visual { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+  .owner-avatar {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 2px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 60px rgba(201,168,76,0.15), inset 0 0 40px rgba(201,168,76,0.05);
+    overflow: hidden;
+  }
+  .owner-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  .owner-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .owner-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--cream);
+    opacity: 0.5;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .owner-info .section-title, .owner-info .section-label { text-align: left; }
+  .contact-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .contact-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(201,168,76,0.03);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .contact-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.08);
+    transform: translateY(-2px);
+  }
+  .contact-card-icon { font-size: 1.5rem; }
+  .contact-card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+  }
+  .contact-card-value {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #1a7a3e, #25a050);
+    color: white;
+    padding: 14px 32px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.3s;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 20px rgba(37,160,80,0.3);
+  }
+  .whatsapp-btn:hover {
+    background: linear-gradient(135deg, #25a050, #30cc66);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(37,160,80,0.5);
+  }
+
+  /* ===== HOURS ===== */
+  #hours { max-width: 1000px; }
+  .hours-table { width: 100%; border-collapse: collapse; margin-top: 3rem; }
+  .hours-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    padding: 0 2rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+  .hours-table td {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    color: var(--cream);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    transition: all 0.2s;
+  }
+  .hours-table tr:hover td { background: rgba(201,168,76,0.04); }
+  .hours-table .day-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+  .hours-table .day-hours { color: var(--gold-light); }
+  .hours-table .closed-row td { opacity: 0.4; }
+  .closed-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    background: rgba(200,50,50,0.15);
+    border: 1px solid rgba(200,50,50,0.3);
+    color: #e06060;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .open-badge {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    box-shadow: 0 0 8px #4CAF50;
+    margin-right: 8px;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  /* ===== LOCATION ===== */
+  #location {
+    background: var(--deep-black);
+    max-width: 100%;
+    padding: 6rem 5%;
+  }
+  .location-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .map-container {
+    position: relative;
+    border: 1px solid rgba(201,168,76,0.2);
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .map-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(201,168,76,0.4);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .map-container iframe {
+    width: 100%; height: 100%;
+    border: none;
+    filter: invert(85%) hue-rotate(180deg) saturate(0.7);
+  }
+  .location-info .section-title, .location-info .section-label { text-align: left; }
+  .address-block {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(201,168,76,0.02);
+    margin-top: 2rem;
+    transition: all 0.3s;
+  }
+  .address-block:hover { border-color: rgba(201,168,76,0.35); }
+  .address-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .address-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .address-value { font-size: 1rem; line-height: 1.7; color: var(--cream); opacity: 0.75; }
+  .directions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--black);
+    padding: 14px 32px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .directions-btn:hover {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--deep-black);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 4rem 5% 2rem;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .footer-brand .footer-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+    text-decoration: none;
+  }
+  .footer-brand p {
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.5;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 280px;
+  }
+  .footer-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+  .footer-links a {
+    font-size: 0.9rem;
+    color: var(--cream);
+    opacity: 0.55;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .footer-links a:hover { opacity: 1; color: var(--gold); }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 2rem auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-copy {
+    font-size: 0.8rem;
+    color: var(--cream);
+    opacity: 0.35;
+    letter-spacing: 0.05em;
+  }
+  .footer-copy span { color: var(--gold-dark); opacity: 0.7; }
+
+  /* ===== MOBILE NAV ===== */
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,4,3,0.98);
+    z-index: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .mobile-nav.open { opacity: 1; pointer-events: all; }
+  .mobile-nav ul {
+    list-style: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .mobile-nav a {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--gold); }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .about-inner, .owner-inner, .location-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { display: none; }
+    .contact-cards { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .rates-header { flex-direction: column; align-items: flex-start; }
+    .rates-meta { align-items: flex-start; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 4rem 5%; }
+    .hero-title { font-size: 3.5rem; }
+    .hero-buttons { flex-direction: column; align-items: center; }
+    .products-grid, .features-grid { grid-template-columns: 1fr; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .rates-main-grid { grid-template-columns: 1fr; }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--deep-black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Mobile Nav Overlay -->
+<div class="mobile-nav" id="mobileNav">
+  <ul>
+    <li><a href="#about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="#live-rates" onclick="closeMobileNav()">Live Rates</a></li>
+    <li><a href="#products" onclick="closeMobileNav()">Products</a></li>
+    <li><a href="#gems-showcase" onclick="closeMobileNav()">Gemstones</a></li>
+    <li><a href="#owner" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="#hours" onclick="closeMobileNav()">Hours</a></li>
+    <li><a href="#location" onclick="closeMobileNav()">Location</a></li>
+  </ul>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-gem">
+      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="navGem" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#c9843c"/>
+            <stop offset="30%" style="stop-color:#c9a84c"/>
+            <stop offset="60%" style="stop-color:#2e6fcc"/>
+            <stop offset="100%" style="stop-color:#9b52cc"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 3 L35 14 L28 35 L12 35 L5 14 Z" fill="none" stroke="url(#navGem)" stroke-width="1.5"/>
+        <path d="M20 3 L35 14 L20 22 L5 14 Z" fill="url(#navGem)" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      AL-RIAZ
+      <span>Gems &amp; Jewellers</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#live-rates">Live Rates</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#gems-showcase">Gemstones</a></li>
+    <li><a href="#why-us">Why Us</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="https://wa.me/923459202067" target="_blank" class="nav-cta">WhatsApp Us</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- RATES TICKER BAR -->
+<div class="rates-ticker-bar" id="tickerBar">
+  <div class="ticker-label">📡 LIVE RATES</div>
+  <div class="ticker-track">
+    <div class="ticker-scroll" id="tickerScroll">
+      <!-- Populated by JS -->
+      <div class="ticker-item"><span class="ticker-name">Loading prices</span><span class="ticker-price" style="margin-left:8px">...</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-content">
+    <span class="hero-crown">👑</span>
+    <svg class="hero-gem-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroGemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#e8821a"/>
+          <stop offset="25%" style="stop-color:#d4364a"/>
+          <stop offset="50%" style="stop-color:#2e6fcc"/>
+          <stop offset="75%" style="stop-color:#2ecc7a"/>
+          <stop offset="100%" style="stop-color:#9b52cc"/>
+        </linearGradient>
+        <linearGradient id="gemShine" x1="0%" y1="0%" x2="60%" y2="100%">
+          <stop offset="0%" style="stop-color:rgba(255,255,255,0.4)"/>
+          <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+        </linearGradient>
+      </defs>
+      <path d="M60 8 L100 40 L80 108 L40 108 L20 40 Z" fill="none" stroke="url(#heroGemGrad)" stroke-width="3"/>
+      <path d="M60 8 L100 40 L60 60 L20 40 Z" fill="url(#heroGemGrad)" opacity="0.4"/>
+      <path d="M60 60 L100 40 L80 108 Z" fill="url(#heroGemGrad)" opacity="0.25"/>
+      <path d="M60 60 L20 40 L40 108 Z" fill="url(#heroGemGrad)" opacity="0.15"/>
+      <path d="M40 108 L60 60 L80 108 Z" fill="url(#heroGemGrad)" opacity="0.3"/>
+      <path d="M60 8 L80 30 L60 38 L40 30 Z" fill="url(#gemShine)"/>
+    </svg>
+
+    <p class="hero-tagline">Est. &mdash; Peshawar, Pakistan &mdash; Finest Gemstones</p>
+    <h1 class="hero-title">
+      <span class="al">AL&#8209;</span><span class="riaz">RIAZ</span>
+    </h1>
+    <h2 class="hero-subtitle">Gems &amp; Jewellers</h2>
+    <p class="hero-desc">We Deal in all Kinds of Gemstones &amp; Jewellery</p>
+
+    <div class="hero-buttons">
+      <a href="#live-rates" class="btn-primary">📊 View Live Rates</a>
+      <a href="https://wa.me/923459202067" target="_blank" class="btn-secondary">WhatsApp Us</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== LIVE RATES ===== -->
+<div id="live-rates">
+  <div class="live-rates-inner">
+    <div class="rates-header">
+      <div class="rates-header-left">
+        <p class="section-label">Market Prices</p>
+        <h2 class="section-title">Live <span class="gold-text">Rates</span></h2>
+      </div>
+      <div class="rates-meta">
+        <div class="rates-live-badge">
+          <span class="live-dot"></span>
+          Live Market Data
+        </div>
+        <div class="rates-timestamp" id="ratesTimestamp">Fetching latest prices…</div>
+        <div class="rates-currency-toggle">
+          <button class="currency-btn active" id="btnUSD" onclick="switchCurrency('USD')">USD</button>
+          <button class="currency-btn" id="btnPKR" onclick="switchCurrency('PKR')">PKR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Cards: Gold & Silver -->
+    <div class="rates-main-grid" id="mainRatesGrid">
+      <!-- Gold Card -->
+      <div class="rate-card" style="--card-accent: #c9a84c;">
+        <div class="rate-card-shimmer"></div>
+        <div class="rate-card-top">
+          <div class="rate-card-icon">🥇</div>
+          <div class="rate-card-change rate-change-flat" id="goldChange">— %</div>
+        </div>
+        <div class="rate-card-name">Gold</div>
+        <div class="rate-card-symbol">Aurum · Au · 24K</div>
+        <div class="rate-primary" id="goldPrimary"><span class="rate-loading"></span></div>
+        <div class="rate-per-unit" id="goldPerUnit">Per Troy Ounce</div>
+        <div class="rate-breakdowns">
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Gram</div>
+            <div class="rate-breakdown-value highlighted" id="goldPerGram"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Tola</div>
+            <div class="rate-breakdown-value highlighted" id="goldPerTola"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">22K / Gram</div>
+            <div class="rate-breakdown-value" id="gold22kGram"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">18K / Gram</div>
+            <div class="rate-breakdown-value" id="gold18kGram"><span class="rate-loading"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Silver Card -->
+      <div class="rate-card" style="--card-accent: #b0bec5;">
+        <div class="rate-card-shimmer"></div>
+        <div class="rate-card-top">
+          <div class="rate-card-icon">🥈</div>
+          <div class="rate-card-change rate-change-flat" id="silverChange">— %</div>
+        </div>
+        <div class="rate-card-name">Silver</div>
+        <div class="rate-card-symbol">Argentum · Ag · 999</div>
+        <div class="rate-primary" id="silverPrimary"><span class="rate-loading"></span></div>
+        <div class="rate-per-unit" id="silverPerUnit">Per Troy Ounce</div>
+        <div class="rate-breakdowns">
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Gram</div>
+            <div class="rate-breakdown-value highlighted" id="silverPerGram"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Tola</div>
+            <div class="rate-breakdown-value highlighted" id="silverPerTola"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per KG</div>
+            <div class="rate-breakdown-value" id="silverPerKg"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">925 Sterling</div>
+            <div class="rate-breakdown-value" id="silverSterling"><span class="rate-loading"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platinum Card -->
+      <div class="rate-card" style="--card-accent: #9e9e9e;">
+        <div class="rate-card-shimmer"></div>
+        <div class="rate-card-top">
+          <div class="rate-card-icon">💎</div>
+          <div class="rate-card-change rate-change-flat" id="platinumChange">— %</div>
+        </div>
+        <div class="rate-card-name">Platinum</div>
+        <div class="rate-card-symbol">Platinum · Pt · 950</div>
+        <div class="rate-primary" id="platinumPrimary"><span class="rate-loading"></span></div>
+        <div class="rate-per-unit" id="platinumPerUnit">Per Troy Ounce</div>
+        <div class="rate-breakdowns">
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Gram</div>
+            <div class="rate-breakdown-value highlighted" id="platPerGram"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Tola</div>
+            <div class="rate-breakdown-value highlighted" id="platPerTola"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">950 Alloy</div>
+            <div class="rate-breakdown-value" id="plat950"><span class="rate-loading"></span></div>
+          </div>
+          <div class="rate-breakdown-item">
+            <div class="rate-breakdown-label">Per Oz</div>
+            <div class="rate-breakdown-value" id="platPerOz"><span class="rate-loading"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Row: Palladium + Diamond Ref + Exchange -->
+    <div class="rates-secondary-grid">
+      <div class="rate-card-small" style="--card-accent: #ce93d8;">
+        <div class="rate-card-small-icon">⚪</div>
+        <div class="rate-card-small-body">
+          <div class="rate-card-small-name">Palladium</div>
+          <div class="rate-card-small-price" id="palladiumPrice"><span class="rate-loading"></span></div>
+          <div class="rate-card-small-sub" id="palladiumSub">Per Troy Ounce</div>
+        </div>
+        <div class="rate-card-small-change rate-change-flat" id="palladiumChange">—</div>
+      </div>
+
+      <div class="rate-card-small" style="--card-accent: #80cbc4;">
+        <div class="rate-card-small-icon">💠</div>
+        <div class="rate-card-small-body">
+          <div class="rate-card-small-name">Diamond (Ref)</div>
+          <div class="rate-card-small-price" id="diamondPrice">$4,500–6,500</div>
+          <div class="rate-card-small-sub">Per Carat · Round Brilliant · VS2</div>
+        </div>
+        <div class="rate-card-small-change rate-change-flat" style="font-size:0.5rem; opacity:0.5;">Market<br>Ref</div>
+      </div>
+
+      <div class="rate-card-small" style="--card-accent: #4db6ac;">
+        <div class="rate-card-small-icon">🇵🇰</div>
+        <div class="rate-card-small-body">
+          <div class="rate-card-small-name">USD / PKR Rate</div>
+          <div class="rate-card-small-price" id="usdPkrRate"><span class="rate-loading"></span></div>
+          <div class="rate-card-small-sub">Live Exchange Rate</div>
+        </div>
+        <div class="rate-card-small-change" id="usdPkrChange" style="color:var(--gold);">—</div>
+      </div>
+
+      <div class="rate-card-small" style="--card-accent: #ffb74d;">
+        <div class="rate-card-small-icon">🔄</div>
+        <div class="rate-card-small-body">
+          <div class="rate-card-small-name">Gold 24K — 1 Tola</div>
+          <div class="rate-card-small-price" id="goldTolaHighlight"><span class="rate-loading"></span></div>
+          <div class="rate-card-small-sub">In Pakistani Rupees</div>
+        </div>
+        <div class="rate-card-small-change rate-change-flat" style="font-size:0.5rem; opacity:0.5;">PKR<br>Price</div>
+      </div>
+    </div>
+
+    <p class="rates-disclaimer">
+      Prices sourced from live market feeds. Rates are indicative and may vary slightly from trading prices. Contact us for exact buying/selling rates. Refreshes every 5 minutes.
+    </p>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-text reveal">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title">Crafting <span class="gold-text">Brilliance</span><br/>Since Generations</h2>
+      <p class="section-desc" style="margin:1rem 0 1.5rem;">A legacy of trust, authenticity, and unparalleled gemstone expertise.</p>
+      <p>At AL-RIAZ Gems &amp; Jewellers, we have been serving connoisseurs of fine gemstones and jewellery with dedication and passion. Our collection represents the very best that nature has to offer — from the depths of the earth to your hands.</p>
+      <p>Under the visionary leadership of <strong style="color:var(--gold);">Adnan Afridi</strong>, we have built an unmatched reputation for authenticity, fair pricing, and extraordinary craftsmanship across all kinds of precious and semi-precious gemstones.</p>
+
+      <div class="about-stats">
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Gemstone Varieties</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Authentic Stones</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-4">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">WhatsApp Support</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual reveal reveal-delay-2">
+      <div class="about-gem-display">
+        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+        <svg class="center-gem" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bigGemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#e8821a"/>
+              <stop offset="20%" style="stop-color:#d4364a"/>
+              <stop offset="40%" style="stop-color:#2e6fcc"/>
+              <stop offset="60%" style="stop-color:#2ecc7a"/>
+              <stop offset="80%" style="stop-color:#9b52cc"/>
+              <stop offset="100%" style="stop-color:#c9a84c"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path d="M100 15 L165 70 L135 180 L65 180 L35 70 Z" fill="none" stroke="url(#bigGemGrad)" stroke-width="2" filter="url(#glow)"/>
+          <path d="M100 15 L165 70 L100 105 L35 70 Z" fill="url(#bigGemGrad)" opacity="0.35"/>
+          <path d="M100 105 L165 70 L135 180 Z" fill="url(#bigGemGrad)" opacity="0.2"/>
+          <path d="M100 105 L35 70 L65 180 Z" fill="url(#bigGemGrad)" opacity="0.12"/>
+          <path d="M65 180 L100 105 L135 180 Z" fill="url(#bigGemGrad)" opacity="0.28"/>
+          <path d="M100 15 L130 55 L100 68 L70 55 Z" fill="rgba(255,255,255,0.18)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section id="products">
+  <div class="section-label reveal">Our Collections</div>
+  <h2 class="section-title reveal">What We <span class="gold-text">Offer</span></h2>
+  <p class="section-desc reveal">From precious stones to bespoke jewellery — every piece tells a story.</p>
+
+  <div class="products-grid">
+    <div class="product-card product-card-gold reveal">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e63946"/><stop offset="100%" style="stop-color:#9b1b2a"/></linearGradient></defs>
+          <path d="M50 10 L80 38 L65 85 L35 85 L20 38 Z" fill="url(#prod1)"/>
+          <path d="M50 10 L80 38 L50 52 L20 38 Z" fill="rgba(255,255,255,0.2)"/>
+          <path d="M50 52 L80 38 L65 85 Z" fill="rgba(0,0,0,0.2)"/>
+          <path d="M50 52 L20 38 L35 85 Z" fill="rgba(0,0,0,0.1)"/>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Precious Gemstones</div>
+        <div class="product-desc">Rubies, Sapphires, Emeralds, and Diamonds sourced from the world's finest mines. Each stone certified for authenticity.</div>
+      </div>
+    </div>
+    <div class="product-card product-card-gold reveal reveal-delay-1">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c9a84c"/><stop offset="100%" style="stop-color:#6b5420"/></linearGradient></defs>
+          <circle cx="50" cy="50" r="32" fill="none" stroke="url(#prod2)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="28" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="2"/>
+          <path d="M50 8 L62 18 L56 32 L44 32 L38 18 Z" fill="#2e6fcc"/>
+          <path d="M50 8 L62 18 L50 24 L38 18 Z" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Gold & Silver Jewellery</div>
+        <div class="product-desc">Exquisite rings, necklaces, bracelets, and earrings crafted in 18K/22K gold and sterling silver with gem settings.</div>
+      </div>
+    </div>
+    <div class="product-card product-card-gold reveal reveal-delay-2">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3d9970"/><stop offset="100%" style="stop-color:#1a5c40"/></linearGradient></defs>
+          <ellipse cx="50" cy="50" rx="30" ry="40" fill="url(#prod3)"/>
+          <ellipse cx="50" cy="50" rx="26" ry="36" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <path d="M36 30 L50 20 L64 30" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+          <ellipse cx="43" cy="40" rx="5" ry="7" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Semi-Precious Stones</div>
+        <div class="product-desc">Amethyst, Topaz, Tourmaline, Peridot, Aquamarine and more — a rainbow of colors for every taste and budget.</div>
+      </div>
+    </div>
+    <div class="product-card product-card-gold reveal reveal-delay-1">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#9b52cc"/><stop offset="100%" style="stop-color:#4a1a70"/></linearGradient></defs>
+          <path d="M30 50 Q20 30 40 18 Q60 8 78 22 Q92 35 88 55 Q82 75 65 82 Q45 90 30 78 Q15 68 30 50 Z" fill="none" stroke="url(#prod4)" stroke-width="5"/>
+          <circle cx="50" cy="12" r="6" fill="#d4364a"/>
+          <circle cx="72" cy="24" r="5" fill="#c9a84c"/>
+          <circle cx="85" cy="48" r="5" fill="#2e6fcc"/>
+          <circle cx="68" cy="78" r="5" fill="#2ecc7a"/>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Custom Jewellery Design</div>
+        <div class="product-desc">Bring your vision to life. Our master craftsmen create bespoke pieces tailored to your exact specifications and desires.</div>
+      </div>
+    </div>
+    <div class="product-card product-card-gold reveal reveal-delay-2">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e8821a"/><stop offset="100%" style="stop-color:#7a3a08"/></linearGradient></defs>
+          <circle cx="50" cy="15" r="7" fill="url(#prod5)"/>
+          <circle cx="72" cy="26" r="6" fill="url(#prod5)" opacity="0.9"/>
+          <circle cx="84" cy="50" r="6" fill="url(#prod5)" opacity="0.8"/>
+          <circle cx="72" cy="74" r="6" fill="url(#prod5)" opacity="0.7"/>
+          <circle cx="50" cy="85" r="7" fill="url(#prod5)" opacity="0.9"/>
+          <circle cx="28" cy="74" r="6" fill="url(#prod5)" opacity="0.8"/>
+          <circle cx="16" cy="50" r="6" fill="url(#prod5)" opacity="0.7"/>
+          <circle cx="28" cy="26" r="6" fill="url(#prod5)" opacity="0.9"/>
+          <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(232,130,26,0.2)" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tasbih & Prayer Beads</div>
+        <div class="product-desc">Handcrafted prayer beads in gemstone and precious materials — Amber, Aqeeq, Turquoise, and more in traditional designs.</div>
+      </div>
+    </div>
+    <div class="product-card product-card-gold reveal reveal-delay-3">
+      <div class="product-icon-wrap">
+        <svg class="product-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="prod6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c9a84c"/><stop offset="50%" style="stop-color:#f5e199"/><stop offset="100%" style="stop-color:#8a6e2e"/></linearGradient></defs>
+          <rect x="20" y="15" width="60" height="75" rx="2" fill="rgba(201,168,76,0.08)" stroke="url(#prod6)" stroke-width="1.5"/>
+          <line x1="32" y1="32" x2="68" y2="32" stroke="rgba(201,168,76,0.4)" stroke-width="1.5"/>
+          <line x1="32" y1="44" x2="68" y2="44" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <line x1="32" y1="54" x2="55" y2="54" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <circle cx="50" cy="72" r="10" fill="none" stroke="url(#prod6)" stroke-width="2"/>
+          <text x="50" y="76" text-anchor="middle" font-size="8" fill="rgba(201,168,76,0.8)" font-family="serif">✓</text>
+        </svg>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Certified Gemstones</div>
+        <div class="product-desc">Every significant gemstone comes with authentication and quality certification, ensuring you invest with complete confidence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GEMS MARQUEE ===== -->
+<div id="gems-showcase">
+  <div class="gems-inner">
+    <div class="section-label reveal">Our Inventory</div>
+    <h2 class="section-title reveal">Gemstones We <span class="gold-text">Carry</span></h2>
+    <p class="section-desc reveal">Hundreds of varieties — rare, exotic, and timeless.</p>
+
+    <div class="gems-marquee-wrap">
+      <div class="gems-marquee" id="marquee">
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#e63946" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Ruby</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#1976D2" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Sapphire</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#388E3C" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Emerald</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><path d="M30 6 L50 22 L43 52 L17 52 L10 22 Z" fill="rgba(200,200,220,0.7)"/><path d="M30 6 L50 22 L30 32 L10 22 Z" fill="rgba(255,255,255,0.4)"/></svg><span class="gem-item-name">Diamond</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#7B1FA2" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Amethyst</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#0097A7" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Aquamarine</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#F57F17" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Topaz</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#558B2F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Peridot</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#00796B" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Turquoise</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#8D1F1F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Aqeeq</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#E65100" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Amber</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#F48FB1" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Rose Quartz</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#FFC107" opacity="0.7"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Citrine</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#880E4F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Garnet</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#b0bec5" opacity="0.7"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.3)"/></svg><span class="gem-item-name">Pearl</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#4E342E" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Tourmaline</span></div>
+        <!-- Duplicate -->
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#e63946" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Ruby</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#1976D2" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Sapphire</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#388E3C" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Emerald</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><path d="M30 6 L50 22 L43 52 L17 52 L10 22 Z" fill="rgba(200,200,220,0.7)"/><path d="M30 6 L50 22 L30 32 L10 22 Z" fill="rgba(255,255,255,0.4)"/></svg><span class="gem-item-name">Diamond</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#7B1FA2" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Amethyst</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#0097A7" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Aquamarine</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#F57F17" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Topaz</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#558B2F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Peridot</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#00796B" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Turquoise</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#8D1F1F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Aqeeq</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#E65100" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Amber</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#F48FB1" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Rose Quartz</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#FFC107" opacity="0.7"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Citrine</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#880E4F" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Garnet</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#b0bec5" opacity="0.7"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.3)"/></svg><span class="gem-item-name">Pearl</span></div>
+        <div class="gem-item"><svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="22" ry="28" fill="#4E342E" opacity="0.8"/><ellipse cx="22" cy="22" rx="5" ry="7" fill="rgba(255,255,255,0.2)"/></svg><span class="gem-item-name">Tourmaline</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHY CHOOSE US ===== -->
+<div id="why-us">
+  <div class="why-inner">
+    <div class="section-label reveal">Our Promise</div>
+    <h2 class="section-title reveal">Why Choose <span class="gold-text">AL-RIAZ</span></h2>
+    <p class="section-desc reveal">We don't just sell gems — we build relationships built on trust and expertise.</p>
+    <div class="features-grid">
+      <div class="feature-card reveal"><span class="feature-icon">💎</span><div class="feature-title">100% Authentic</div><div class="feature-desc">Every gemstone we sell is genuine and natural. We stand behind the authenticity of each piece with our reputation on the line.</div></div>
+      <div class="feature-card reveal reveal-delay-1"><span class="feature-icon">🏆</span><div class="feature-title">Expert Knowledge</div><div class="feature-desc">Decades of expertise in gemology. Our owner Adnan Afridi personally examines every stone to ensure the highest quality standards.</div></div>
+      <div class="feature-card reveal reveal-delay-2"><span class="feature-icon">💰</span><div class="feature-title">Fair Pricing</div><div class="feature-desc">Transparent, honest pricing with no hidden costs. We believe every gem lover deserves access to genuine stones at fair market value.</div></div>
+      <div class="feature-card reveal reveal-delay-3"><span class="feature-icon">🌍</span><div class="feature-title">Global Sourcing</div><div class="feature-desc">Our gemstones are sourced from premier mines worldwide — Afghanistan, Burma, Sri Lanka, Colombia, and beyond.</div></div>
+      <div class="feature-card reveal"><span class="feature-icon">📱</span><div class="feature-title">WhatsApp Availability</div><div class="feature-desc">Reach us anytime on WhatsApp for inquiries, photos, pricing, and consultation. Quick responses for serious buyers.</div></div>
+      <div class="feature-card reveal reveal-delay-1"><span class="feature-icon">🎁</span><div class="feature-title">Gift & Packaging</div><div class="feature-desc">Beautiful gift packaging available for all purchases. Perfect for weddings, anniversaries, and special occasions.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OWNER ===== -->
+<section id="owner">
+  <div class="owner-inner">
+    <div class="owner-visual reveal">
+      <div class="owner-avatar">
+        <img src="adnan.jpg" alt="Adnan Afridi" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+      </div>
+      <div class="owner-name">Adnan Afridi</div>
+      <div class="owner-title">CEO &amp; Owner — AL-RIAZ Gems</div>
+    </div>
+    <div class="owner-info reveal reveal-delay-1">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Contact <span class="gold-text">Us</span></h2>
+      <p style="font-size:1.1rem; line-height:1.8; color:var(--cream); opacity:0.65; margin-top:1rem;">
+        Our owner and CEO, Adnan Afridi, is personally available to assist you in finding the perfect gemstone or jewellery piece. Reach out via WhatsApp or call us directly.
+      </p>
+      <div class="contact-cards">
+        <a href="tel:+923459202067" class="contact-card">
+          <span class="contact-card-icon">📞</span>
+          <div class="contact-card-label">Call Us</div>
+          <div class="contact-card-value">0345 920 2067</div>
+        </a>
+        <a href="https://wa.me/923459202067" target="_blank" class="contact-card">
+          <span class="contact-card-icon">💬</span>
+          <div class="contact-card-label">WhatsApp</div>
+          <div class="contact-card-value">0345 920 2067</div>
+        </a>
+        <div class="contact-card" style="grid-column:span 2;">
+          <span class="contact-card-icon">👤</span>
+          <div class="contact-card-label">Owner / CEO</div>
+          <div class="contact-card-value">Adnan Afridi</div>
+        </div>
+      </div>
+      <a href="https://wa.me/923459202067" target="_blank" class="whatsapp-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOURS ===== -->
+<section id="hours">
+  <div class="section-label reveal">Visiting Hours</div>
+  <h2 class="section-title reveal">Shop <span class="gold-text">Hours</span></h2>
+  <p class="section-desc reveal">Come visit us in person to experience our collection firsthand.</p>
+  <div class="reveal">
+    <table class="hours-table">
+      <thead><tr><th>Day</th><th>Status</th><th>Hours</th></tr></thead>
+      <tbody>
+        <tr><td class="day-name">Monday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr><td class="day-name">Tuesday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr><td class="day-name">Wednesday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr><td class="day-name">Thursday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr><td class="day-name">Friday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr><td class="day-name">Saturday</td><td><span class="open-badge"></span><span style="color:#4CAF50;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;">Open</span></td><td class="day-hours">9:00 AM – 9:00 PM</td></tr>
+        <tr class="closed-row"><td class="day-name">Sunday</td><td><span class="closed-badge">Closed</span></td><td class="day-hours" style="color:rgba(232,223,200,0.3);">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== LOCATION ===== -->
+<div id="location">
+  <div class="location-inner">
+    <div class="map-container reveal">
+      <iframe src="https://maps.google.com/maps?q=33.9969,71.5248&hl=en&z=15&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="location-info reveal reveal-delay-1">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Our <span class="gold-text">Location</span></h2>
+      <div class="address-block">
+        <span class="address-icon">📍</span>
+        <div class="address-text">
+          <div class="address-label">Address</div>
+          <div class="address-value">AL-RIAZ Gems &amp; Jewellers<br/>Peshawar, Khyber Pakhtunkhwa<br/>Pakistan</div>
+        </div>
+      </div>
+      <div class="address-block">
+        <span class="address-icon">📞</span>
+        <div class="address-text">
+          <div class="address-label">Contact</div>
+          <div class="address-value">0345 920 2067<br/>(Call or WhatsApp)</div>
+        </div>
+      </div>
+      <div class="address-block">
+        <span class="address-icon">🕐</span>
+        <div class="address-text">
+          <div class="address-label">Opening Hours</div>
+          <div class="address-value">Monday – Saturday: 9AM – 9PM<br/><span style="color:#e06060;">Sunday: Closed</span></div>
+        </div>
+      </div>
+      <a href="https://maps.app.goo.gl/zmSJoYFCN5D6K7vs5" target="_blank" class="directions-btn">🗺️ &nbsp;Get Directions</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">AL-RIAZ Gems & Jewellers</span>
+      <p>We Deal in all Kinds of Gemstones &amp; Jewellery. Your trusted source for authentic, certified gemstones in Peshawar, Pakistan.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#live-rates">Live Rates</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#gems-showcase">Gemstones</a></li>
+        <li><a href="#why-us">Why Choose Us</a></li>
+        <li><a href="#owner">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <ul class="footer-links">
+        <li><a href="tel:+923459202067">📞 0345 920 2067</a></li>
+        <li><a href="https://wa.me/923459202067" target="_blank">💬 WhatsApp</a></li>
+        <li><a href="#hours">🕐 Shop Hours</a></li>
+        <li><a href="https://maps.app.goo.gl/zmSJoYFCN5D6K7vs5" target="_blank">📍 Get Directions</a></li>
+        <li><a href="#location">🗺️ Location</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2025 <span>AL-RIAZ Gems &amp; Jewellers</span>. All rights reserved. Owner: Adnan Afridi</p>
+    <p class="footer-copy">Crafted with 💛 in Peshawar, Pakistan</p>
+  </div>
+</footer>
+
+<script>
+// ===== Constants =====
+const TROY_OZ_TO_GRAM = 31.1035;
+const GRAM_TO_TOLA    = 11.6638;
+const REFRESH_MS      = 5 * 60 * 1000; // 5 minutes
+
+// ===== Fallback Reference Prices (updated periodically) =====
+// These show instantly while live data loads, ensuring prices ALWAYS display
+const FALLBACK = {
+  gold:      3150,   // USD/troy oz approx
+  silver:    34.5,
+  platinum:  1020,
+  palladium: 1080,
+  pkrRate:   280.5,
+  source:    'reference'
+};
+
+// State
+let currentCurrency = 'USD';
+let ratesData       = null;
+let prevRates       = null;
+let dataSource      = 'reference'; // 'live' | 'partial' | 'reference'
+
+// ===== Currency Formatter =====
+function fmt(val, curr) {
+  if (!val && val !== 0) return '—';
+  if (curr === 'PKR') {
+    return Math.round(val).toLocaleString('en-PK');
+  }
+  return val < 10
+    ? val.toFixed(4)
+    : val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// ===== Fetch Metal Prices (tries multiple APIs) =====
+async function fetchMetals() {
+  // ── Attempt 1: metals.live ──────────────────────────────────────────────
+  try {
+    const r = await fetch('https://metals.live/api/spot', { cache: 'no-store' });
+    if (r.ok) {
+      const data = await r.json();
+      const m = Array.isArray(data) ? data[0] : data;
+      if (m && m.gold > 0) {
+        return { gold: +m.gold, silver: +m.silver, platinum: +m.platinum || FALLBACK.platinum, palladium: +m.palladium || FALLBACK.palladium, source: 'live' };
+      }
+    }
+  } catch(e) { console.warn('metals.live failed:', e.message); }
+
+  // ── Attempt 2: goldprice.org public feed (gold + silver, live) ──────────
+  try {
+    const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD', { cache: 'no-store' });
+    if (r.ok) {
+      const d = await r.json();
+      const item = d.items && d.items[0];
+      if (item && item.xauPrice > 0) {
+        return {
+          gold:      +item.xauPrice,
+          silver:    +item.xagPrice,
+          platinum:  FALLBACK.platinum,   // goldprice.org doesn't provide Pt/Pd
+          palladium: FALLBACK.palladium,
+          source: 'partial'
+        };
+      }
+    }
+  } catch(e) { console.warn('goldprice.org failed:', e.message); }
+
+  // ── Fallback: Static reference prices ──────────────────────────────────
+  return { ...FALLBACK, source: 'reference' };
+}
+
+// ===== Fetch USD → PKR Rate (tries multiple APIs) =====
+async function fetchPKR() {
+  // ── Attempt 1: ExchangeRate-API free (includes PKR, no key needed) ──────
+  try {
+    const r = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.rates && d.rates.PKR > 0) return d.rates.PKR;
+    }
+  } catch(e) { console.warn('open.er-api failed:', e.message); }
+
+  // ── Attempt 2: exchangerate.host free ───────────────────────────────────
+  try {
+    const r = await fetch('https://api.exchangerate.host/latest?base=USD&symbols=PKR', { cache: 'no-store' });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.rates && d.rates.PKR > 0) return d.rates.PKR;
+    }
+  } catch(e) { console.warn('exchangerate.host failed:', e.message); }
+
+  // ── Attempt 3: fawazahmed0 free exchange rates GitHub CDN ───────────────
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const r = await fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${today}/v1/currencies/usd.json`, { cache: 'no-store' });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.usd && d.usd.pkr > 0) return d.usd.pkr;
+    }
+  } catch(e) { console.warn('fawazahmed0 CDN failed:', e.message); }
+
+  // ── Fallback ─────────────────────────────────────────────────────────────
+  return FALLBACK.pkrRate;
+}
+
+// ===== Main Fetch Orchestrator =====
+async function fetchRates() {
+  // Show fallback INSTANTLY on first load so page never shows "pending"
+  if (!ratesData) {
+    ratesData = { ...FALLBACK };
+    dataSource = 'reference';
+    updateUI();
+    updateTicker();
+  }
+
+  // Now fetch live data in parallel
+  const [metals, pkrRate] = await Promise.all([fetchMetals(), fetchPKR()]);
+
+  prevRates  = { ...ratesData };
+  dataSource = metals.source;
+  ratesData  = {
+    gold:      metals.gold,
+    silver:    metals.silver,
+    platinum:  metals.platinum,
+    palladium: metals.palladium,
+    pkrRate,
+  };
+
+  updateUI();
+  updateTicker();
+}
+
+// ===== Compute Derived Prices =====
+function derived(ozPrice, pkrRate, curr) {
+  const factor = curr === 'PKR' ? pkrRate : 1;
+  const perOz   = ozPrice * factor;
+  const perGram = (ozPrice / TROY_OZ_TO_GRAM) * factor;
+  const perTola = perGram * GRAM_TO_TOLA;
+  return { perOz, perGram, perTola };
+}
+
+// ===== Set Element Text Safely =====
+function setEl(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+// ===== Update UI =====
+function updateUI() {
+  if (!ratesData) return;
+  const { gold, silver, platinum, palladium, pkrRate } = ratesData;
+  const curr = currentCurrency;
+  const sym  = curr === 'PKR' ? '₨ ' : '$ ';
+
+  // Timestamp + source badge
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit' });
+  const dateStr = now.toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+  const sourceLabel = dataSource === 'live' ? '● Live' : dataSource === 'partial' ? '◑ Partial Live' : '◌ Reference';
+  document.getElementById('ratesTimestamp').textContent =
+    sourceLabel + '  ·  Updated: ' + timeStr + '  ·  ' + dateStr;
+
+  // ---- GOLD ----
+  const g = derived(gold, pkrRate, curr);
+  setEl('goldPrimary',   sym + fmt(g.perOz, curr));
+  setEl('goldPerUnit',   curr === 'PKR' ? 'Per Troy Ounce (PKR)' : 'Per Troy Ounce (USD)');
+  setEl('goldPerGram',   sym + fmt(g.perGram, curr));
+  setEl('goldPerTola',   sym + fmt(g.perTola, curr));
+  setEl('gold22kGram',   sym + fmt(g.perGram * (22/24), curr));
+  setEl('gold18kGram',   sym + fmt(g.perGram * (18/24), curr));
+  updateChange('goldChange', gold, prevRates?.gold);
+
+  // ---- SILVER ----
+  const s = derived(silver, pkrRate, curr);
+  setEl('silverPrimary',  sym + fmt(s.perOz, curr));
+  setEl('silverPerUnit',  curr === 'PKR' ? 'Per Troy Ounce (PKR)' : 'Per Troy Ounce (USD)');
+  setEl('silverPerGram',  sym + fmt(s.perGram, curr));
+  setEl('silverPerTola',  sym + fmt(s.perTola, curr));
+  setEl('silverPerKg',    sym + fmt(s.perGram * 1000, curr));
+  setEl('silverSterling', sym + fmt(s.perGram * 0.925, curr));
+  updateChange('silverChange', silver, prevRates?.silver);
+
+  // ---- PLATINUM ----
+  const p = derived(platinum, pkrRate, curr);
+  setEl('platinumPrimary', sym + fmt(p.perOz, curr));
+  setEl('platinumPerUnit', curr === 'PKR' ? 'Per Troy Ounce (PKR)' : 'Per Troy Ounce (USD)');
+  setEl('platPerGram',     sym + fmt(p.perGram, curr));
+  setEl('platPerTola',     sym + fmt(p.perTola, curr));
+  setEl('plat950',         sym + fmt(p.perGram * 0.95, curr));
+  setEl('platPerOz',       sym + fmt(p.perOz, curr));
+  updateChange('platinumChange', platinum, prevRates?.platinum);
+
+  // ---- PALLADIUM ----
+  const pd = derived(palladium, pkrRate, curr);
+  setEl('palladiumPrice', sym + fmt(pd.perOz, curr));
+  setEl('palladiumSub',   curr === 'PKR' ? 'Per Troy Ounce (PKR)' : 'Per Troy Ounce (USD)');
+  updateChange('palladiumChange', palladium, prevRates?.palladium);
+
+  // ---- USD/PKR ----
+  setEl('usdPkrRate', '₨ ' + pkrRate.toFixed(2));
+
+  // ---- Gold Tola Highlight (always PKR) ----
+  const goldTolaInPkr = (gold / TROY_OZ_TO_GRAM) * GRAM_TO_TOLA * pkrRate;
+  setEl('goldTolaHighlight', '₨ ' + Math.round(goldTolaInPkr).toLocaleString('en-PK'));
+
+  // ---- Diamond reference ----
+  if (curr === 'PKR') {
+    const lo = Math.round(4500 * pkrRate).toLocaleString('en-PK');
+    const hi = Math.round(6500 * pkrRate).toLocaleString('en-PK');
+    setEl('diamondPrice', '₨ ' + lo + '–' + hi);
+  } else {
+    setEl('diamondPrice', '$4,500–6,500');
+  }
+}
+
+function updateChange(id, current, previous) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!previous || !current) { el.textContent = '— %'; el.className = 'rate-card-change rate-change-flat'; return; }
+  const pct = ((current - previous) / previous) * 100;
+  if (Math.abs(pct) < 0.001) {
+    el.textContent = '→ 0.00%';
+    el.className = 'rate-card-change rate-change-flat';
+  } else if (pct > 0) {
+    el.textContent = '▲ +' + pct.toFixed(2) + '%';
+    el.className = 'rate-card-change rate-change-up';
+  } else {
+    el.textContent = '▼ ' + pct.toFixed(2) + '%';
+    el.className = 'rate-card-change rate-change-down';
+  }
+}
+
+// ===== Ticker =====
+function updateTicker() {
+  if (!ratesData) return;
+  const { gold, silver, platinum, palladium, pkrRate } = ratesData;
+  const metals = [
+    { name: 'GOLD', oz: gold,      color: '#c9a84c', icon: '🥇' },
+    { name: 'SILVER', oz: silver,  color: '#b0bec5', icon: '🥈' },
+    { name: 'PLATINUM', oz: platinum, color: '#9e9e9e', icon: '💎' },
+    { name: 'PALLADIUM', oz: palladium, color: '#ce93d8', icon: '⚪' },
+  ];
+
+  const items = metals.map(m => {
+    const perGram = m.oz / TROY_OZ_TO_GRAM;
+    const perTola = perGram * GRAM_TO_TOLA;
+    const perGramPkr = perGram * pkrRate;
+    return `
+      <div class="ticker-item">
+        <span style="color:${m.color}">${m.icon}</span>
+        <span class="ticker-name">${m.name}</span>
+        <span class="ticker-price">$${m.oz.toFixed(2)}/oz</span>
+        <span style="color:rgba(201,168,76,0.4);font-size:0.5rem;">|</span>
+        <span class="ticker-price" style="color:#b0bec5;">₨${Math.round(perGramPkr).toLocaleString()}/g</span>
+        <span style="color:rgba(201,168,76,0.4);font-size:0.5rem;">|</span>
+        <span class="ticker-price" style="color:#e8c96a;">₨${Math.round(perGramPkr * GRAM_TO_TOLA).toLocaleString()}/tola</span>
+      </div>
+    `;
+  }).join('');
+
+  // Duplicate for infinite scroll
+  const scroll = document.getElementById('tickerScroll');
+  scroll.innerHTML = items + items;
+}
+
+// ===== Currency Toggle =====
+function switchCurrency(curr) {
+  currentCurrency = curr;
+  document.getElementById('btnUSD').classList.toggle('active', curr === 'USD');
+  document.getElementById('btnPKR').classList.toggle('active', curr === 'PKR');
+  updateUI();
+}
+
+// ===== Custom Cursor =====
+const cursor     = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top  = mouseY + 'px';
+});
+
+function animateCursorRing() {
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top  = ringY + 'px';
+  requestAnimationFrame(animateCursorRing);
+}
+animateCursorRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    cursorRing.style.transform = 'translate(-50%,-50%) scale(1.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursorRing.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+});
+
+// ===== Navbar Scroll =====
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ===== Mobile Nav =====
+function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+// ===== Particles =====
+const particleContainer = document.getElementById('particles');
+const colors = ['#c9a84c','#e8c96a','#d4364a','#2e6fcc','#2ecc7a','#9b52cc','#e8821a'];
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left             = Math.random() * 100 + '%';
+  p.style.background       = colors[Math.floor(Math.random() * colors.length)];
+  p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+  p.style.borderRadius     = Math.random() > 0.5 ? '50%' : '0';
+  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+  p.style.animationDelay   = (Math.random() * 10) + 's';
+  particleContainer.appendChild(p);
+}
+
+// ===== Scroll Reveal =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== Active Nav =====
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks  = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : ''; });
+});
+
+// ===== Init & Auto-Refresh =====
+fetchRates();
+setInterval(fetchRates, REFRESH_MS);
+</script>
+</body>
+</html>
